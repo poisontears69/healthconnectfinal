@@ -67,7 +67,7 @@
                 </ul>
                 <div class="d-flex">
                     <a href="login.php" class="btn btn-outline-light me-2">Login</a>
-                    <a href="signup.php" class="btn btn-primary">Sign Up</a>
+                    <a href="register.php" class="btn btn-primary">Sign Up</a>
                 </div>
             </div>
         </div>
