@@ -1,0 +1,7 @@
+{
+    "name": "user/healthconnectfinal",
+    "description": "A virtual clinic management system",
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
