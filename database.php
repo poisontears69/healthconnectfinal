@@ -1,7 +1,7 @@
 <?php
 class Database {
     private $host = 'localhost';
-    private $dbname = 'healthconnect';
+    private $dbname = 'healthconnectfinal';
     private $username = 'root';
     private $password = '';
     private $conn;
