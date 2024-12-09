@@ -9,16 +9,26 @@ $clinic_id = $_GET['clinic_id'] ?? null;
 $sql_clinic = "SELECT * FROM clinics WHERE clinic_id = :clinic_id";
 $clinic = $db->query($sql_clinic, ['clinic_id' => $clinic_id])->fetch(PDO::FETCH_ASSOC);
 
+// Fetch clinic members (staff)
+$sql_members = "SELECT u.user_id, u.first_name, u.last_name, u.email 
+                FROM clinic_members cm
+                JOIN users u ON cm.user_id = u.user_id
+                WHERE cm.clinic_id = :clinic_id";
+$members = $db->query($sql_members, ['clinic_id' => $clinic_id])->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch patients
+$sql_patients = "SELECT * FROM patients WHERE clinic_id = :clinic_id";
+$patients = $db->query($sql_patients, ['clinic_id' => $clinic_id])->fetchAll(PDO::FETCH_ASSOC);
+
 // Fetch posts
-$sql_posts = "SELECT cp.*, u.first_name, u.last_name FROM clinic_posts cp 
+$sql_posts = "SELECT cp.*, u.first_name, u.last_name FROM clinic_posts cp
               JOIN users u ON cp.user_id = u.user_id
-              WHERE cp.clinic_id = :clinic_id 
-              ORDER BY cp.created_at DESC";
+              WHERE cp.clinic_id = :clinic_id ORDER BY cp.created_at DESC";
 $posts = $db->query($sql_posts, ['clinic_id' => $clinic_id])->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch photos
-$sql_photos = "SELECT * FROM clinic_photos WHERE clinic_id = :clinic_id ORDER BY uploaded_at DESC";
-$photos = $db->query($sql_photos, ['clinic_id' => $clinic_id])->fetchAll(PDO::FETCH_ASSOC);
+// Fetch settings (just an example for demonstration)
+$sql_settings = "SELECT * FROM clinic_settings WHERE clinic_id = :clinic_id";
+$settings = $db->query($sql_settings, ['clinic_id' => $clinic_id])->fetch(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -27,108 +37,172 @@ $photos = $db->query($sql_photos, ['clinic_id' => $clinic_id])->fetchAll(PDO::FE
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clinic Details</title>
+    <title>Clinic Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .photo-thumbnail {
-            max-width: 150px; /* Limit the width */
-            max-height: 150px; /* Limit the height */
-            object-fit: cover; /* Maintain aspect ratio while cropping excess */
-            border-radius: 5px; /* Add some rounding for a polished look */
-            cursor: pointer; /* Indicate the image is clickable */
+        .cover-photo {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
         }
-        .modal-content {
-            position: relative;
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .delete-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            z-index: 1051; /* Ensure it stays above other content */
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
         }
     </style>
 </head>
 <body>
 <div class="container mt-4">
+    <!-- Clinic Profile Section -->
     <div class="row">
-        <!-- Sidebar for Photos -->
-        <div class="col-md-4">
-            <h4>Photos</h4>
-            <!-- Upload Photo -->
-            <form action="upload_photo.php" method="POST" enctype="multipart/form-data" class="mb-4">
-                <input type="hidden" name="clinic_id" value="<?php echo $clinic_id; ?>">
-                <div class="mb-3">
-                    <input type="file" class="form-control" name="photo" accept="image/*" required>
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <img src="<?php echo htmlspecialchars($clinic['clinic_cover_photo'] ?? 'default-cover.jpg'); ?>" 
+                         class="cover-photo" alt="Cover Photo">
                 </div>
-                <button type="submit" class="btn btn-primary">Upload</button>
-            </form>
-
-            <!-- Display Photos -->
-            <div class="row">
-                <?php foreach ($photos as $index => $photo): ?>
-                    <div class="col-6 mb-3">
-                        <img src="<?php echo htmlspecialchars($photo['photo_path']); ?>" 
-                             class="img-fluid photo-thumbnail" 
-                             alt="Photo" 
-                             data-bs-toggle="modal" 
-                             data-bs-target="#photoModal<?php echo $index; ?>">
-                    </div>
-
-                    <!-- Modal for Full-Screen Photo -->
-                    <div class="modal fade" id="photoModal<?php echo $index; ?>" tabindex="-1" aria-labelledby="photoModalLabel<?php echo $index; ?>" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <!-- Delete Button -->
-                                <a href="delete_photo.php?photo_id=<?php echo $photo['photo_id']; ?>&clinic_id=<?php echo $clinic_id; ?>" 
-                                   class="btn btn-danger delete-button" 
-                                   onclick="return confirm('Are you sure you want to delete this photo?');">
-                                    Delete
-                                </a>
-                                <img src="<?php echo htmlspecialchars($photo['photo_path']); ?>" class="img-fluid" alt="Full-Screen Photo">
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
+                <div class="card-body">
+                <h3 class="mt-2"><?php echo htmlspecialchars($clinic['clinic_name']); ?></h3>
+                    <p><?php echo htmlspecialchars($clinic['description']); ?></p>
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- Main Content: Page Wall -->
-        <div class="col-md-8">
-            <h2><?php echo htmlspecialchars($clinic['clinic_name']); ?></h2>
-            <p><?php echo htmlspecialchars($clinic['description']); ?></p>
+    <!-- Dashboard Navigation -->
+    <div class="row">
+        <div class="col-md-3">
+            <?php include 'dashboard_clinic.php'; ?>
+        </div>
 
-            <!-- Upload Post -->
-            <form action="upload_post.php" method="POST" class="mb-4">
-                <input type="hidden" name="clinic_id" value="<?php echo $clinic_id; ?>">
-                <div class="mb-3">
-                    <textarea class="form-control" name="content" rows="3" placeholder="Write something..." required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Post</button>
-            </form>
-
-            <!-- Timeline of Posts -->
-            <h4>Posts</h4>
-            <?php foreach ($posts as $post): ?>
-                <div class="card mb-3">
+        <!-- Dashboard Content -->
+        <div class="col-md-9">
+            <!-- Manage Clinic Members -->
+            <div class="collapse" id="members">
+                <div class="card mb-4">
+                    <div class="card-header">Clinic Members</div>
                     <div class="card-body">
-                        <h6><?php echo htmlspecialchars($post['first_name'] . ' ' . $post['last_name']); ?></h6>
-                        <p><?php echo nl2br(htmlspecialchars($post['content'])); ?></p>
-                        <small class="text-muted"><?php echo $post['created_at']; ?></small>
-
-                        <!-- Edit and Delete Buttons -->
-                        <?php if ($_SESSION['user_id'] == $post['user_id']): ?>
-                            <div class="mt-2">
-                                <a href="edit_post.php?post_id=<?php echo $post['post_id']; ?>" class="btn btn-sm btn-warning">Edit</a>
-                                <a href="delete_post.php?post_id=<?php echo $post['post_id']; ?>&clinic_id=<?php echo $clinic_id; ?>" 
-                                class="btn btn-sm btn-danger" 
-                                onclick="return confirm('Are you sure you want to delete this post?');">
-                                    Delete
-                                </a>
-                            </div>
-                        <?php endif; ?>
+                        <h5>Clinic Staff</h5>
+                        <ul class="list-group">
+                            <?php foreach ($members as $member): ?>
+                                <li class="list-group-item">
+                                    <?php echo htmlspecialchars($member['first_name'] . ' ' . $member['last_name']); ?>
+                                    <small class="text-muted"><?php echo htmlspecialchars($member['email']); ?></small>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                        <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addMemberModal">Add Member</button>
                     </div>
                 </div>
-            <?php endforeach; ?>
+            </div>
+
+            <!-- Manage Appointments -->
+            <div class="collapse" id="appointments">
+                <div class="card mb-4">
+                    <div class="card-header">Manage Appointments</div>
+                    <div class="card-body">
+                        <a href="book_appointment.php?clinic_id=<?php echo $clinic_id; ?>" class="btn btn-primary">Book New Appointment</a>
+                        <h5 class="mt-3">Upcoming Appointments</h5>
+                        <ul class="list-group">
+                            <!-- Add appointment listings here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manage Patients -->
+            <div class="collapse" id="patients">
+                <div class="card mb-4">
+                    <div class="card-header">Manage Patients</div>
+                    <div class="card-body">
+                        <h5>Patient List</h5>
+                        <ul class="list-group">
+                            <?php foreach ($patients as $patient): ?>
+                                <li class="list-group-item">
+                                    <?php echo htmlspecialchars($patient['first_name'] . ' ' . $patient['last_name']); ?>
+                                    <small class="text-muted"><?php echo htmlspecialchars($patient['email']); ?></small>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Post News -->
+            <div class="collapse" id="posts">
+                <div class="card mb-4">
+                    <div class="card-header">Post News</div>
+                    <div class="card-body">
+                        <form action="upload_post.php" method="POST">
+                            <input type="hidden" name="clinic_id" value="<?php echo $clinic_id; ?>">
+                            <div class="mb-3">
+                                <textarea class="form-control" name="content" rows="3" placeholder="Write news here..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Post News</button>
+                        </form>
+                        <h5 class="mt-3">Recent Posts</h5>
+                        <ul class="list-group">
+                            <?php foreach ($posts as $post): ?>
+                                <li class="list-group-item">
+                                    <strong><?php echo htmlspecialchars($post['first_name'] . ' ' . $post['last_name']); ?>:</strong>
+                                    <?php echo nl2br(htmlspecialchars($post['content'])); ?>
+                                    <small class="text-muted"><?php echo $post['created_at']; ?></small>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings -->
+            <div class="collapse" id="settings">
+                <div class="card mb-4">
+                    <div class="card-header">Clinic Settings</div>
+                    <div class="card-body">
+                        <h5>General Settings</h5>
+                        <form action="update_settings.php" method="POST">
+                            <input type="hidden" name="clinic_id" value="<?php echo $clinic_id; ?>">
+                            <!-- Add more settings here -->
+                            <button type="submit" class="btn btn-primary">Save Settings</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal to Add Member -->
+<div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addMemberModalLabel">Add New Member</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="add_member.php" method="POST">
+                    <input type="hidden" name="clinic_id" value="<?php echo $clinic_id; ?>">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" id="email" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Member</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>

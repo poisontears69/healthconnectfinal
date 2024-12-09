@@ -5,23 +5,42 @@ require_once 'database.php'; // Include the database connection
 // Create a new Database object
 $db = new Database();
 
-// Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get user input
+// Function to generate a unique clinic code
+function generateClinicCode() {
+    $randomCode = strtoupper(bin2hex(random_bytes(3)));
+
+    // Ensure the code is unique
+    while (empty($randomCode) || checkIfCodeExists($randomCode)) {
+        $randomCode = strtoupper(bin2hex(random_bytes(3)));
+    }
+
+    return $randomCode;
+}
+
+// Function to check if the code already exists in the database
+function checkIfCodeExists($code) {
+    global $db;
+    $sql = "SELECT COUNT(*) FROM clinics WHERE clinic_code = :clinic_code";
+    $stmt = $db->query($sql, ['clinic_code' => $code]);
+    return $stmt->fetchColumn() > 0;
+}
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $clinic_name = trim($_POST['clinic_name']);
     $description = trim($_POST['description']);
     $address = trim($_POST['address']);
     $specialization = trim($_POST['specialization']);
-    $user_id = $_SESSION['user_id']; // Assuming user_id is stored in session after login
+    $user_id = $_SESSION['user_id'];
 
-    // Validate the inputs
+    // Validate inputs
     if (empty($clinic_name) || empty($description) || empty($address) || empty($specialization)) {
         $_SESSION['error'] = "All fields are required.";
         header("Location: create_clinic.php");
         exit();
     }
 
-    // Handle file uploads for profile photo and cover photo
+    // Handle file uploads
     $profile_photo = null;
     $cover_photo = null;
 
@@ -35,30 +54,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         move_uploaded_file($_FILES['clinic_cover_photo']['tmp_name'], $cover_photo);
     }
 
+    // Generate a unique clinic code
+    $clinic_code = generateClinicCode();
+
     try {
-        // Insert the clinic into the clinics table, including new fields
-        $sql = "INSERT INTO clinics (user_id, clinic_name, description, address, specialization, clinic_profile_photo, clinic_cover_photo, created_at) 
-                VALUES (:user_id, :clinic_name, :description, :address, :specialization, :clinic_profile_photo, :clinic_cover_photo, NOW())";
+        // Insert into clinics table
+        $sql = "INSERT INTO clinics (user_id, clinic_name, description, address, specialization, clinic_code, clinic_profile_photo, clinic_cover_photo, created_at) 
+                VALUES (:user_id, :clinic_name, :description, :address, :specialization, :clinic_code, :clinic_profile_photo, :clinic_cover_photo, NOW())";
         $params = [
             ':user_id' => $user_id,
             ':clinic_name' => $clinic_name,
             ':description' => $description,
             ':address' => $address,
             ':specialization' => $specialization,
+            ':clinic_code' => $clinic_code,
             ':clinic_profile_photo' => $profile_photo,
             ':clinic_cover_photo' => $cover_photo
         ];
-        $clinic_id = $db->insert($sql, $params); // Get the newly created clinic_id
+        $clinic_id = $db->insert($sql, $params);
 
-        // Insert default settings into the clinic_settings table
+        // Insert default settings
         $settings_sql = "INSERT INTO clinic_settings (clinic_id, allow_online_consultation, monday_open, tuesday_open, 
                          wednesday_open, thursday_open, friday_open, saturday_open, sunday_open, open_time, close_time, created_at) 
                          VALUES (:clinic_id, 0, 0, 0, 0, 0, 0, 0, 0, '09:00:00', '18:00:00', NOW())";
-        $settings_params = [':clinic_id' => $clinic_id];
-        $db->insert($settings_sql, $settings_params);
+        $db->insert($settings_sql, [':clinic_id' => $clinic_id]);
+
+        // Insert admin as a clinic member
+        $member_sql = "INSERT INTO clinic_members (clinic_id, user_id, role, status, created_at) 
+                       VALUES (:clinic_id, :user_id, 'admin', 'approved', NOW())";
+        $db->insert($member_sql, [
+            ':clinic_id' => $clinic_id,
+            ':user_id' => $user_id
+        ]);
 
         $_SESSION['success'] = "Clinic created successfully! Configure its settings now.";
-        header("Location: clinic_settings.php?clinic_id=$clinic_id"); // Redirect to clinic settings
+        header("Location: clinic_settings.php?clinic_id=$clinic_id");
         exit();
     } catch (PDOException $e) {
         $_SESSION['error'] = "Error creating clinic: " . $e->getMessage();

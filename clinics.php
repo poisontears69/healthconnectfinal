@@ -1,5 +1,6 @@
 <?php
 session_start();
+include 'navbar_clinic.php';
 require_once 'database.php'; // Include the database connection
 
 // Check if the user is logged in
@@ -86,13 +87,14 @@ $clinic = $stmt->fetch(PDO::FETCH_ASSOC);
 
         <div class="row justify-content-center">
             <?php if (!$clinic): ?>
-                <!-- If the user has no clinics, show a clickable card to create a clinic -->
+                <!-- If the user has no clinics, show a clickable card to create or join a clinic -->
                 <div class="col-md-4">
                     <div class="card text-center">
                         <div class="card-body">
                             <h5 class="card-title">No Clinic Created</h5>
                             <p class="card-text">You have not created any clinics yet.</p>
-                            <a href="create_clinic.php" class="btn btn-primary">Create a Clinic</a>
+                            <a href="create_clinic.php" class="btn btn-primary mb-3">Create a Clinic</a>
+                            <a href="join_clinic.php" class="btn btn-secondary">Join a Clinic</a>
                         </div>
                     </div>
                 </div>
@@ -108,7 +110,9 @@ $clinic = $stmt->fetch(PDO::FETCH_ASSOC);
 
                         <div class="card-body clinic-card-body">
                             <h5 class="card-title"><?php echo htmlspecialchars($clinic['clinic_name']); ?></h5>
+                            <h5 class="card-title"><?php echo htmlspecialchars($clinic['clinic_code']); ?></h5>
                             <p class="card-text"><?php echo htmlspecialchars($clinic['description']); ?></p>
+                            <p class="card-text"><?php echo htmlspecialchars($clinic['specialization']); ?></p>
                             <a href="clinic_details.php?clinic_id=<?php echo $clinic['clinic_id']; ?>" class="btn btn-info">View Clinic</a>
                         </div>
                         <a href="clinic_settings.php?clinic_id=<?php echo $clinic['clinic_id']; ?>" class="settings-icon">

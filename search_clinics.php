@@ -12,15 +12,24 @@ if (empty($query)) {
 } else {
     // SQL query to fetch clinics based on search query
     $sql_clinics = "SELECT * FROM clinics WHERE clinic_name LIKE :query ORDER BY created_at DESC";
-    $clinics = $db->query($sql_clinics, ['query' => '%' . $query . '%'])->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Prepare and execute query with parameters
+    $stmt = $db->getConnection()->prepare($sql_clinics);  // Correcting this to use the database connection
+    $stmt->execute(['query' => '%' . $query . '%']);
+    $clinics = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 // Check if clinics are found
-if ($clinics) {
+if ($clinics && count($clinics) > 0) {
     foreach ($clinics as $clinic) {
         echo '<div class="col-md-4 clinic-card">
                 <div class="card">
-                    <img src="' . htmlspecialchars($clinic['image'] ?? 'default-clinic.jpg') . '" class="card-img-top" alt="Clinic Image">
+                    <!-- Cover Photo with fallback to default if not available -->
+                    <img src="' . htmlspecialchars($clinic['clinic_cover_photo'] ?? 'default-cover.jpg') . '" class="cover-photo card-img-top" alt="Clinic Cover Photo">
+                    
+                    <!-- Profile Photo with fallback to default if not available -->
+                    <img src="' . htmlspecialchars($clinic['clinic_profile_photo'] ?? 'default-profile.jpg') . '" class="profile-photo" alt="Clinic Profile Photo">
+                    
                     <div class="card-body">
                         <h5 class="card-title">' . htmlspecialchars($clinic['clinic_name']) . '</h5>
                         <p class="card-text">' . htmlspecialchars(substr($clinic['description'], 0, 100)) . '...</p>

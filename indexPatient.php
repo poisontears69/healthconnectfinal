@@ -2,7 +2,7 @@
 require_once 'database.php';
 $db = new Database();
 
-// Fetch all clinics
+// Fetch all clinics (for initial load)
 $sql_clinics = "SELECT * FROM clinics ORDER BY created_at DESC";
 $clinics = $db->query($sql_clinics);
 
@@ -19,7 +19,7 @@ if ($clinics !== false && $clinics->rowCount() > 0) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor Search</title>
+    <title>Find a Clinic</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
@@ -96,12 +96,12 @@ if ($clinics !== false && $clinics->rowCount() > 0) {
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>Find the Right Doctor for You</h1>
-            <p class="lead">Search by location to connect with the best doctors in your area.</p>
+            <h1>Find the Right Clinic for You</h1>
+            <p class="lead">Search by location or specialization to connect with the best clinics in your area.</p>
 
             <!-- Search Bar -->
             <div class="search-bar">
-                <input type="text" id="searchQuery" class="form-control" placeholder="Search doctors by name, location or specialization" />
+                <input type="text" id="searchQuery" class="form-control" placeholder="Search clinics by name, location, or specialization" />
             </div>
         </div>
     </section>
@@ -150,9 +150,6 @@ if ($clinics !== false && $clinics->rowCount() > 0) {
                     }
                 });
             }
-
-            // Fetch all clinics initially
-            fetchClinics('');
 
             // Trigger search when the user types in the search bar
             $('#searchQuery').on('input', function () {
