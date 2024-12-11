@@ -1,77 +1,212 @@
 /* clinics_styles.css */
 
+/* General Styling */
+body {
+    font-family: var(--font-family, Arial, sans-serif);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    color: var(--text-color, #000);
+    background-color: var(--background-color, #fff);
+    scroll-behavior: smooth;
+}
+
+.navbar {
+    padding: 0.4rem 1rem; /* Adjusted padding for a compact look */
+    box-shadow: var(--shadow-sm, 0 2px 5px rgba(0, 0, 0, 0.1));
+}
+
+.navbar .nav-link {
+    font-size: 0.85rem; /* Slightly smaller font size */
+    padding: 0.5rem; /* Adjusted padding */
+    margin-right: var(--spacing-sm, 0.5rem); /* Slightly reduced margin */
+    color: var(--text-color, white);
+}
+
+.navbar .nav-link:hover {
+    color: var(--accent-color, #85a9c6);
+}
+
+.navbar-brand img {
+    height: 30px; /* Further reduced logo size for compactness */
+}
+
+.navbar-toggler {
+    padding: 0.25rem 0.5rem; /* Reduced padding for the toggler */
+}
+
+
 /* Hero Section */
 .hero {
-    height: 70vh;
+    background: url('assets/images/hero.jpg') no-repeat center center/cover;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('hero-image.jpg');
-    background-size: cover;
-    background-position: center;
-    color: white;
     text-align: center;
+    color: var(--text-color, white);
+    position: relative;
 }
 
 .hero h1 {
-    font-size: 3rem;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
 }
 
-.search-bar {
-    max-width: 700px;
-    margin: 20px auto;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 10px;
-}
-
-/* Clinic Card Styles */
-.clinic-card {
-    position: relative;
-    margin-bottom: 2rem;
-}
-
-.cover-photo {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
-.profile-photo {
-    position: absolute;
-    top: 100px;
-    left: 20px;
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 5px solid white;
-}
-
-.clinic-card-body {
-    padding-top: 140px;
-}
-
-/* Section Styling */
-section {
-    padding: 3rem 0;
-}
-
-section h2 {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-/* Utility Classes */
-.text-center {
-    text-align: center;
-}
-
-.mb-4 {
+.hero p {
+    font-size: 1rem;
     margin-bottom: 1.5rem;
 }
 
-.g-4 {
-    gap: 1.5rem;
+.hero .btn {
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: var(--border-radius, 5px);
+    background-color: var(--primary-color, #007bff);
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.hero .btn:hover {
+    background-color: var(--accent-color, #0056b3);
+}
+
+/* About Section */
+#about {
+    height: 100vh;
+    padding: 3rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#about .lead {
+    margin-bottom: 2rem;
+}
+
+#about img {
+    margin-top: 1rem;
+    border-radius: var(--border-radius, 10px);
+    box-shadow: var(--shadow-sm, 0 4px 10px rgba(0, 0, 0, 0.2));
+}
+
+#about .list-group-item {
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    margin-bottom: 0.5rem;
+}
+
+/* Call to Action Section */
+.bg-primary {
+    height: 100vh;
+    padding: 3rem 0;
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.bg-primary h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.bg-primary p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Services Section */
+#services {
+    height: 100vh;
+    padding: 3rem 0;
+    background-color: var(--secondary-color, #f8f9fa);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#services h2 {
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+}
+
+.card {
+    border: none;
+    box-shadow: var(--shadow-sm, 0 4px 10px rgba(0, 0, 0, 0.1));
+    transition: transform 0.3s ease;
+    border-radius: var(--border-radius, 10px);
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md, 0 8px 15px rgba(0, 0, 0, 0.2));
+}
+
+.card-img-top {
+    height: 300px;
+    object-fit: cover;
+    border-top-left-radius: var(--border-radius, 10px);
+    border-top-right-radius: var(--border-radius, 10px);
+}
+
+/* Team Section */
+#team {
+    height: 100vh;
+    background-color: var(--background-color, #ffffff);
+    padding: 3rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#team h2 {
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+}
+
+#team .card {
+    border: none;
+    box-shadow: var(--shadow-sm, 0 4px 10px rgba(0, 0, 0, 0.1));
+    transition: transform 0.3s ease;
+}
+
+#team .card:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md, 0 8px 15px rgba(0, 0, 0, 0.2));
+}
+
+/* Contact Section */
+#contact {
+    height: 100vh;
+    padding: 3rem 0;
+    background-color: var(--secondary-color, #f8f9fa);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#contact h2 {
+    margin-bottom: 2rem;
+}
+
+#contact form .form-control {
+    border-radius: var(--border-radius, 5px);
+    box-shadow: var(--shadow-sm, 0 2px 5px rgba(0, 0, 0, 0.1));
+}
+
+#contact form .btn {
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: var(--border-radius, 5px);
+    background-color: var(--primary-color, #007bff);
+    color: white;
+}
+
+#contact form .btn:hover {
+    background-color: var(--accent-color, #0056b3);
 }
