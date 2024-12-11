@@ -48,7 +48,7 @@ $params = [
 try {
     $db->update($sql, $params);
     $_SESSION['success'] = "Clinic settings updated successfully!";
-    header("Location: clinics.php"); // Redirect to clinics.php after successful update
+    header("Location: index_user.php?page=clinics"); // Redirect to clinics.php after successful update
     exit();
 } catch (PDOException $e) {
     $_SESSION['error'] = "Error updating clinic settings: " . $e->getMessage();

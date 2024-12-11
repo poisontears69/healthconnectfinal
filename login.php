@@ -10,6 +10,8 @@ session_start();
     <title>Login</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
@@ -36,7 +38,7 @@ session_start();
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-control" id="password" name="password" required>
                         <!-- Eye icon for password visibility toggle -->
-                        <i class="bi bi-eye position-absolute" id="togglePassword" style="top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;"></i>
+                        <i class="bi bi-eye position-absolute" id="togglePassword" style="top: 70%; right: 10px; transform: translateY(-50%); cursor: pointer;"></i>
                     </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary">Login</button>
