@@ -148,6 +148,54 @@
     }
 }
 
+/* Sidenav Styles */
+.sidenav {
+    position: fixed;
+    height: 100vh;
+    width: 60px;
+    background-color: var(--dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    z-index: 1000;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.sidenav .nav-item {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--light);
+    font-size: 20px;
+    text-decoration: none;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.sidenav .nav-item:hover {
+    background-color: var(--primary);
+    color: #fff;
+}
+
+.sidenav .nav-item i {
+    pointer-events: none; /* Prevents double hover from affecting nested icon */
+}
+
+/* Responsive Behavior */
+@media (max-width: 768px) {
+    .sidenav {
+        width: 50px;
+    }
+
+    .sidenav .nav-item {
+        height: 50px;
+        font-size: 18px;
+    }
+}
+
+
 
 /*** Header ***/
 .header-carousel .owl-carousel-text {
@@ -244,6 +292,13 @@
     color: var(--light);
 }
 
+/*** main ***/
+@media (max-width: 768px) {
+    main {
+        padding-left: 50px;
+    }
+
+}
 
 /*** Service ***/
 .service-item {
