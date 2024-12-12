@@ -78,7 +78,7 @@ session_start();
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
             </div>
-            <a href="" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Register<i class="fa fa-arrow-right ms-3"></i></a>
+            <a href="register.php" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Register<i class="fa fa-arrow-right ms-3"></i></a>
         </div>
     </nav>
     <!-- Navbar End -->
@@ -96,8 +96,8 @@ session_start();
         <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
             <div class="bg-light rounded p-5">
                 <p class="d-inline-block border rounded-pill py-1 px-4">Login</p>
-                <h1 class="mb-4">Welcome Back!</h1>
-                <p class="mb-4">Get your appointments easy and fast.</p>
+                <h1 class="mb-4">Health Connect Staff Portal</h1>
+                <p class="mb-4">Welcome Back! Don't miss out on your appointments</p>
                 <form action="login_process.php" method="POST">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
@@ -113,62 +113,10 @@ session_start();
                         <button type="submit" class="btn btn-primary w-100">Login</button>
                     </div>
                 </form>
-                <p class="text-center mt-3">Don't have an account? <a href="register.php">Register here</a>.</p>
             </div>
         </div>
     </div>
     <!-- Form End -->
-
-
-        <!-- Footer Start -->
-        <div class="container-fluid bg-dark text-light footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
-        <div class="container py-5">
-            <div class="row g-5">
-                <div class="col-lg-3 col-md-6">
-                    <h5 class="text-light mb-4">Address</h5>
-                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Tunga-tunga, Maasin City, Southern Leyte, 6600</p>
-                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+63 171384217</p>
-                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>healthcontactconnect@gmail.com</p>
-                    <div class="d-flex pt-2">
-                        <a class="btn btn-outline-light btn-social rounded-circle" href=""><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-outline-light btn-social rounded-circle" href=""><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-outline-light btn-social rounded-circle" href=""><i class="fab fa-youtube"></i></a>
-                        <a class="btn btn-outline-light btn-social rounded-circle" href=""><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h5 class="text-light mb-4">Quick Links</h5>
-                    <a class="btn btn-link" href="">About Us</a>
-                    <a class="btn btn-link" href="">Contact Us</a>
-                    <a class="btn btn-link" href="">Our Services</a>
-                    <a class="btn btn-link" href="">Terms & Condition</a>
-                    <a class="btn btn-link" href="">Support</a>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h5 class="text-light mb-4">Newsletter</h5>
-                    <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
-                    <div class="position-relative mx-auto" style="max-width: 400px;">
-                        <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
-                        <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container">
-            <div class="copyright">
-                <div class="row">
-                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                        &copy; <a class="border-bottom" href="#">Health Connect</a>, All Right Reserved.
-                    </div>
-                    <div class="col-md-6 text-center text-md-end">
-                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                        Designed By <a class="border-bottom" href="https://htmlcodex.com">Matthew</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Footer End -->
 
     <!-- JavaScript for toggling password visibility -->
     <script>
