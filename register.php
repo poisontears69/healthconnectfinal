@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -76,56 +79,64 @@
             <a href="login.php" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Login<i class="fa fa-arrow-right ms-3"></i></a>
         </div>
     </nav>
-    <!-- Navbar End -->
-    <div class="container vh-100 d-flex align-items-center justify-content-center">
-        <?php if (isset($_GET['error'])): ?>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <?php echo htmlspecialchars($_GET['error']); ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        <?php endif; ?>
-
-        <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
-            <div class="bg-light rounded p-5">
-                <p class="d-inline-block border rounded-pill py-1 px-4">Register</p>
-                <h1 class="mb-4">Create Your Account</h1>
-                <p class="mb-4">Join Health Connect today! Register to access our platform and manage appointments effortlessly.</p>
-                <form action="register_process.php" method="POST">
-                    <div class="mb-3">
+<!-- Navbar End -->
+<div class="container vh-100 d-flex align-items-center justify-content-center">
+    <div class="col-lg-8 wow fadeIn" data-wow-delay="0.1s">
+        <div class="bg-light rounded p-5">
+            <?php if (isset($_SESSION['error'])): ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <?php echo $_SESSION['error']; ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php unset($_SESSION['error']); // Clear the error message after displaying it ?>
+            <?php endif; ?>
+            <h1 class="mb-4">Create Your Account</h1>
+            <p class="mb-4">Join Health Connect today! Register to access our platform and manage appointments effortlessly.</p>
+            <form action="register_process.php" method="POST">
+                <div class="row g-3">
+                    <div class="col-md-6">
                         <label for="firstName" class="form-label">First Name</label>
                         <input type="text" class="form-control" id="firstName" name="first_name" required>
                     </div>
-                    <div class="mb-3">
+                    <div class="col-md-6">
                         <label for="lastName" class="form-label">Last Name</label>
                         <input type="text" class="form-control" id="lastName" name="last_name" required>
                     </div>
-                    <div class="mb-3">
+                    <div class="col-md-6">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" id="email" name="email" required>
                     </div>
-                    <div class="mb-3">
+                    <div class="col-md-6">
                         <label for="contactNumber" class="form-label">Contact Number</label>
                         <input type="text" class="form-control" id="contactNumber" name="contact_number" required>
                     </div>
-                    <div class="mb-3 position-relative">
+                    <div class="col-md-6">
+                        <label for="roleType" class="form-label">Role Type</label>
+                        <select class="form-select" id="roleType" name="roleType" required>
+                            <option value="" disabled selected>Select Role</option>
+                            <option value="1">Doctor</option>
+                            <option value="0">Staff</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 position-relative">
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-control" id="password" name="password" required>
-                        <!-- Eye icon for password visibility toggle -->
-                        <i class="bi bi-eye position-absolute" id="togglePassword" style="top: 70%; right: 10px; transform: translateY(-50%); cursor: pointer;"></i>
+                        <i class="bi bi-eye position-absolute" id="togglePassword" style="top: 70%; right: 15px; transform: translateY(-50%); cursor: pointer;"></i>
                     </div>
-                    <div class="mb-3 position-relative">
+                    <div class="col-md-6 position-relative">
                         <label for="confirmPassword" class="form-label">Confirm Password</label>
                         <input type="password" class="form-control" id="confirmPassword" name="confirm_password" required>
-                        <!-- Eye icon for password visibility toggle -->
-                        <i class="bi bi-eye position-absolute" id="toggleConfirmPassword" style="top: 70%; right: 10px; transform: translateY(-50%); cursor: pointer;"></i>
+                        <i class="bi bi-eye position-absolute" id="toggleConfirmPassword" style="top: 70%; right: 15px; transform: translateY(-50%); cursor: pointer;"></i>
                     </div>
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary w-100">Register</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
+</div>
+
 
     <script>
     // Toggle password visibility for both password fields

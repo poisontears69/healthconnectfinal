@@ -85,17 +85,23 @@ session_start();
 
     <!-- Form Start -->
     <div class="container vh-100 d-flex align-items-center justify-content-center">
-        <?php if (isset($_SESSION['error'])): ?>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <?php echo $_SESSION['error']; ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            <?php unset($_SESSION['error']); // Clear the error message after displaying it ?>
-        <?php endif; ?>
-
         <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
             <div class="bg-light rounded p-5">
-                <p class="d-inline-block border rounded-pill py-1 px-4">Login</p>
+            <?php if (isset($_SESSION['error'])): ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <?php echo $_SESSION['error']; ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php unset($_SESSION['error']); // Clear the error message after displaying it ?>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['success'])): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <?php echo $_SESSION['success']; ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php unset($_SESSION['success']); // Clear the success message after displaying it ?>
+            <?php endif; ?>
                 <h1 class="mb-4">Health Connect Staff Portal</h1>
                 <p class="mb-4">Welcome Back! Don't miss out on your appointments</p>
                 <form action="login_process.php" method="POST">

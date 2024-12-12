@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['email'] = $email;
 
             // Redirect to the dashboard or home page
-            header("Location: index_user.php"); // Replace with your landing page
+            header("Location: about.html"); // Replace with your landing page
             exit();
         } else {
             // Password is incorrect
