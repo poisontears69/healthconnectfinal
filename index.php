@@ -8,6 +8,7 @@ class Stats {
         $this->db = new Database();
     }
 
+
     public function getDoctorCount() {
         $query = "SELECT COUNT(*) FROM users WHERE roleType = '1'";
         $stmt = $this->db->query($query);
