@@ -130,7 +130,7 @@
             <div class="row g-4 mt-4">
                 <div class="col-md-4">
                     <div class="card">
-                        <img src="assets/images/portrait (4).jpg" class="card-img-top" alt="Team Member 1">
+                        <img src="assets/images/portrait (6).jpg" class="card-img-top" alt="Team Member 1">
                         <div class="card-body">
                             <h5 class="card-title">Diserie Becong</h5>
                             <p class="card-text">Developer</p>
@@ -148,7 +148,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card">
-                        <img src="assets/images/portrait (6).jpg" class="card-img-top" alt="Team Member 3">
+                        <img src="assets/images/portrait (4).jpg" class="card-img-top" alt="Team Member 3">
                         <div class="card-body">
                             <h5 class="card-title">Rio Ryn Labor</h5>
                             <p class="card-text">Developer</p>
@@ -160,25 +160,37 @@
     </section>
 
     <!-- Contact Us Section -->
-    <section id="contact" class="py-5">
-        <div class="container text-center">
-            <h2>Contact Us</h2>
-            <form class="mt-4">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" placeholder="Your Name" required>
+<section id="contact" class="py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Contact Details -->
+            <div class="col-md-4 text-start mb-4">
+                <h2>Contact Us</h2>
+                <p><strong>Email:</strong> info@example.com</p>
+                <p><strong>Phone:</strong> +1 234 567 890</p>
+                <p><strong>Address:</strong> 123 Main Street, Cityville, USA</p>
+            </div>
+            <!-- Contact Form -->
+            <div class="col-md-8">
+                <form class="mt-4">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" placeholder="Your Name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="email" class="form-control" placeholder="Your Email" required>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <input type="email" class="form-control" placeholder="Your Email" required>
+                    <div class="mb-3">
+                        <textarea class="form-control" rows="4" placeholder="Your Message" required></textarea>
                     </div>
-                </div>
-                <div class="mb-3">
-                    <textarea class="form-control" rows="4" placeholder="Your Message" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Send Message</button>
-            </form>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
         </div>
-    </section>
+    </div>
+</section>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

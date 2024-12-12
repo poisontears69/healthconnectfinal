@@ -182,16 +182,20 @@ body {
 
 /* Contact Section */
 #contact {
-    height: 100vh;
     padding: 3rem 0;
     background-color: var(--secondary-color, #f8f9fa);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 }
 
 #contact h2 {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    color: var(--text-color, #333);
+}
+
+#contact p {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: var(--text-color, #555);
 }
 
 #contact form .form-control {
@@ -210,3 +214,4 @@ body {
 #contact form .btn:hover {
     background-color: var(--accent-color, #0056b3);
 }
+
