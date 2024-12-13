@@ -148,52 +148,6 @@
     }
 }
 
-/* Sidenav Styles */
-.sidenav {
-    position: fixed;
-    height: 100vh;
-    width: 60px;
-    background-color: var(--dark);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 20px;
-    z-index: 1000;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
-}
-
-.sidenav .nav-item {
-    width: 100%;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--light);
-    font-size: 20px;
-    text-decoration: none;
-    transition: background 0.3s ease, color 0.3s ease;
-}
-
-.sidenav .nav-item:hover {
-    background-color: var(--primary);
-    color: #fff;
-}
-
-.sidenav .nav-item i {
-    pointer-events: none; /* Prevents double hover from affecting nested icon */
-}
-
-/* Responsive Behavior */
-@media (max-width: 768px) {
-    .sidenav {
-        width: 50px;
-    }
-
-    .sidenav .nav-item {
-        height: 50px;
-        font-size: 18px;
-    }
-}
 
 
 
@@ -293,12 +247,70 @@
 }
 
 /*** main ***/
-@media (max-width: 768px) {
-    main {
-        padding-left: 50px;
-    }
-
+.main {
+    max-width: 100%;
 }
+
+/* Clinic Card Styles */
+.clinic-card {
+    border: 1px solid #E6E6E6;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.clinic-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.cover-photo {
+    height: 150px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.profile-photo {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-top: -50px;
+    border: 3px solid #FFFFFF;
+}
+
+/* Button Styles */
+.btn-primary, .btn-secondary {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #034ACF;
+}
+
+.btn-secondary:hover {
+    background-color: #444444;
+    color: #FFFFFF;
+}
+
+/* Alert Box Styles */
+.alert {
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Utility Classes */
+.text-center {
+    text-align: center !important;
+}
+
+.rounded-pill {
+    border-radius: 50rem !important;
+}
+
+.rounded-circle {
+    border-radius: 50% !important;
+}
+
 
 /*** Service ***/
 .service-item {

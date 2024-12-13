@@ -12,13 +12,13 @@ $stmt = $db->query($sql, ['user_id' => $user_id]);
 // Fetch the clinic data if it exists
 $clinic = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
-    <!-- Page Header Start -->
-    <div class="container-fluid page-header py-5 mb-5 wow fadeIn" data-wow-delay="0.1s">
-        <div class="container py-5">
-            <h1 class="display-3 text-white mb-3 animated slideInDown">Clinics</h1>
-        </div>
+<!-- Page Header Start -->
+<div class="container-fluid page-header py-5 mb-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container py-5">
+        <h1 class="display-3 text-white mb-3 animated slideInDown">Clinics</h1>
     </div>
-    <!-- Page Header End -->
+</div>
+<!-- Page Header End -->
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">Your Clinics</h2>
@@ -43,35 +43,43 @@ $clinic = $stmt->fetch(PDO::FETCH_ASSOC);
     <div class="row justify-content-center">
         <?php if (!$clinic): ?>
             <!-- If the user has no clinics, show a clickable card to create or join a clinic -->
-            <div class="col-md-4">
-                <div class="card text-center">
+            <div class="col-md-6">
+                <div class="card text-center border-light shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">No Clinic Created</h5>
                         <p class="card-text">You have not created any clinics yet.</p>
-                        <a href="create_clinic.php" class="btn btn-primary mb-3">Create a Clinic</a>
-                        <a href="join_clinic.php" class="btn btn-secondary">Join a Clinic</a>
+                        <a href="create_clinic.php" class="btn btn-primary rounded-pill mb-2">Create a Clinic</a>
+                        <a href="join_clinic.php" class="btn btn-secondary rounded-pill">Join a Clinic</a>
                     </div>
                 </div>
             </div>
         <?php else: ?>
             <!-- If the user has a clinic, display it -->
-            <div class="col-md-4">
-                <div class="card clinic-card">
+            <div class="col-md-6">
+                <div class="card clinic-card border-light shadow-sm">
                     <!-- Display the cover photo -->
-                    <img src="<?php echo htmlspecialchars($clinic['clinic_cover_photo']); ?>" class="cover-photo" alt="Cover Photo">
+                    <img src="<?php echo htmlspecialchars($clinic['clinic_cover_photo']); ?>" 
+                         class="card-img-top cover-photo rounded-top" alt="Cover Photo">
 
                     <!-- Display the profile photo -->
-                    <img src="<?php echo htmlspecialchars($clinic['clinic_profile_photo']); ?>" class="profile-photo" alt="Profile Photo">
-
-                    <div class="card-body clinic-card-body">
-                        <h5 class="card-title"><?php echo htmlspecialchars($clinic['clinic_name']); ?></h5>
-                        <h5 class="card-title"><?php echo htmlspecialchars($clinic['clinic_code']); ?></h5>
-                        <p class="card-text"><?php echo htmlspecialchars($clinic['specialization']); ?></p>
-                        <a href="clinic_details.php?clinic_id=<?php echo $clinic['clinic_id']; ?>" class="btn btn-info">View Clinic</a>
+                    <div class="text-center mt-n5">
+                        <img src="<?php echo htmlspecialchars($clinic['clinic_profile_photo']); ?>" 
+                             class="profile-photo rounded-circle border" alt="Profile Photo">
                     </div>
-                    <a href="clinic_settings.php?clinic_id=<?php echo $clinic['clinic_id']; ?>" class="settings-icon">
-                        <i class="fas fa-cogs"></i>
-                    </a>
+
+                    <div class="card-body text-center">
+                        <h5 class="card-title"><?php echo htmlspecialchars($clinic['clinic_name']); ?></h5>
+                        <p class="text-muted"><?php echo htmlspecialchars($clinic['clinic_code']); ?></p>
+                        <p class="card-text"><?php echo htmlspecialchars($clinic['specialization']); ?></p>
+                        <a href="clinic_details.php?clinic_id=<?php echo $clinic['clinic_id']; ?>" 
+                           class="btn btn-info rounded-pill">View Clinic</a>
+                    </div>
+                    <div class="text-end pe-3 pb-3">
+                        <a href="clinic_settings.php?clinic_id=<?php echo $clinic['clinic_id']; ?>" 
+                           class="btn btn-outline-secondary rounded-circle">
+                            <i class="fas fa-cogs"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         <?php endif; ?>

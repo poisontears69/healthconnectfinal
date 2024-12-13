@@ -1,6 +1,22 @@
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i class="bi bi-arrow-up"></i></a>
+    <script>
+        document.getElementById("toggle-sidenav").addEventListener("click", function () {
+            const sidenav = document.getElementById("sidenav");
+            const toggleIcon = document.getElementById("toggle-icon");
+            
+            // Toggle hidden class
+            sidenav.classList.toggle("hidden");
+            
+            // Update the button icon
+            if (sidenav.classList.contains("hidden")) {
+                toggleIcon.innerHTML = "&gt;";
+            } else {
+                toggleIcon.innerHTML = "&lt;";
+            }
+        });
+    </script>
 
 
     <!-- JavaScript Libraries -->
@@ -14,6 +30,7 @@
     <script src="lib/tempusdominus/js/moment.min.js"></script>
     <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
     <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
