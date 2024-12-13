@@ -1,8 +1,54 @@
+<?php
+require_once 'database.php'; // Database connection
+$db = new Database();
+
+$clinic_id = $_GET['clinic_id'] ?? null;
+
+// Fetch clinic details
+$sql_clinic = "SELECT * FROM clinics WHERE clinic_id = :clinic_id";
+$clinic = $db->query($sql_clinic, ['clinic_id' => $clinic_id])->fetch(PDO::FETCH_ASSOC);
+
+// Ensure clinic details are available
+if (!$clinic) {
+    die("Clinic not found.");
+}
+
+// Fetch posts
+$sql_posts = "SELECT cp.*, u.first_name, u.last_name FROM clinic_posts cp 
+              JOIN users u ON cp.user_id = u.user_id
+              WHERE cp.clinic_id = :clinic_id 
+              ORDER BY cp.created_at DESC";
+$posts = $db->query($sql_posts, ['clinic_id' => $clinic_id])->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch photos
+$sql_photos = "SELECT * FROM clinic_photos WHERE clinic_id = :clinic_id ORDER BY uploaded_at DESC";
+$photos = $db->query($sql_photos, ['clinic_id' => $clinic_id])->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch clinic settings
+$sql_settings = "SELECT * FROM clinic_settings WHERE clinic_id = :clinic_id";
+$settings = $db->query($sql_settings, ['clinic_id' => $clinic_id])->fetch(PDO::FETCH_ASSOC);
+
+// Parse open days
+$open_days = [];
+if ($settings) {
+    foreach (['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as $day) {
+        if ($settings[$day . '_open']) {
+            $open_days[] = ucfirst($day);
+        }
+    }
+}
+
+$open_time = $settings['open_time'] ?? '09:00:00';
+$close_time = $settings['close_time'] ?? '18:00:00';
+$allow_online_consultation = $settings['allow_online_consultation'] ?? 0;
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
+<meta charset="utf-8">
     <title>Health Connect</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
@@ -31,7 +77,6 @@
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
 </head>
-
 <body>
     <!-- Spinner Start -->
     <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -66,85 +111,48 @@
 
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 wow fadeIn" data-wow-delay="0.1s">
-        <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-            <h1 class="m-0 text-primary"><i class="far fa-hospital me-3"></i>Klinik</h1>
-        </a>
+        <a href="search_for_clinics.php" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Back<i class="fa fa-arrow-left ms-3"></i></a>
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="index.html" class="nav-item nav-link">Home</a>
-                <a href="about.html" class="nav-item nav-link">About</a>
-                <a href="service.html" class="nav-item nav-link">Service</a>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown">Pages</a>
-                    <div class="dropdown-menu rounded-0 rounded-bottom m-0">
-                        <a href="feature.html" class="dropdown-item">Feature</a>
-                        <a href="testimonial.html" class="dropdown-item active">Testimonial</a>
-                    </div>
-                </div>
-                <a href="contact.html" class="nav-item nav-link">Contact</a>
             </div>
-            <a href="search_for_clinics.php" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Clinics<i class="fa fa-arrow-right ms-3"></i></a>
+        <a href="index.php" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <h1 class="m-0 text-primary"><i class="far fa-hospital me-3"></i>Health Connect</h1>
+        </a>
         </div>
     </nav>
     <!-- Navbar End -->
 
-
     <!-- Page Header Start -->
-    <div class="container-fluid page-header py-5 mb-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container-fluid page-header py-5 mb-5 wow fadeIn" data-wow-delay="0.1s" style="background: url('<?php echo htmlspecialchars($clinic['clinic_cover_photo'] ?: 'default-cover.jpg'); ?>') center center / cover no-repeat;">
         <div class="container py-5">
-            <h1 class="display-3 text-white mb-3 animated slideInDown">Testimonial</h1>
-            <nav aria-label="breadcrumb animated slideInDown">
-                <ol class="breadcrumb text-uppercase mb-0">
-                    <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
-                    <li class="breadcrumb-item text-primary active" aria-current="page">Testimonial</li>
-                </ol>
-            </nav>
+            <h1 class="display-3 text-white mb-3 animated slideInDown"><?php echo htmlspecialchars($clinic['clinic_name']); ?></h1>
         </div>
     </div>
     <!-- Page Header End -->
 
-
-    <!-- Testimonial Start -->
-    <div class="container-xxl py-5">
-        <div class="container">
-            <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
-                <p class="d-inline-block border rounded-pill py-1 px-4">Testimonial</p>
-                <h1>What Our Patients Say!</h1>
+    <!-- Clinic Details Start -->
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <h2 class="fw-bold text-primary">About the Clinic</h2>
+                <p class="text-dark fw-medium"><p><?php echo htmlspecialchars($clinic['description']); ?></p>
             </div>
-            <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.1s">
-                <div class="testimonial-item text-center">
-                    <img class="img-fluid bg-light rounded-circle p-2 mx-auto mb-4" src="img/testimonial-1.jpg" style="width: 100px; height: 100px;">
-                    <div class="testimonial-text rounded text-center p-4">
-                        <p>"I had an amazing experience at Health Connect. The doctors were very professional and attentive. They thoroughly explained the treatment options available to me, and I felt confident throughout the entire process. I am now recovering well and couldn't be happier with the care I received!"</p>
-                        <h5 class="mb-1">John Doe</h5>
-                        <span class="fst-italic">Engineer</span>
-                    </div>
-                </div>
-                <div class="testimonial-item text-center">
-                    <img class="img-fluid bg-light rounded-circle p-2 mx-auto mb-4" src="img/testimonial-2.jpg" style="width: 100px; height: 100px;">
-                    <div class="testimonial-text rounded text-center p-4">
-                        <p>"The staff at Health Connect was incredibly helpful and caring. From scheduling my appointment to the actual consultation, everything was seamless. I felt heard and valued as a patient. I would highly recommend their services to anyone seeking quality healthcare!"</p>
-                        <h5 class="mb-1">Jane Smith</h5>
-                        <span class="fst-italic">Teacher</span>
-                    </div>
-                </div>
-                <div class="testimonial-item text-center">
-                    <img class="img-fluid bg-light rounded-circle p-2 mx-auto mb-4" src="img/testimonial-3.jpg" style="width: 100px; height: 100px;">
-                    <div class="testimonial-text rounded text-center p-4">
-                        <p>"I’ve had the privilege of receiving care from Health Connect for both my routine checkups and a major health issue. The team has always been incredibly knowledgeable and friendly. The best part is that I can now book online appointments, making healthcare even more convenient!"</p>
-                        <h5 class="mb-1">Alice Johnson</h5>
-                        <span class="fst-italic">Designer</span>
-                    </div>
+            <div class="col-lg-4">
+                <div class="bg-light rounded p-4 shadow-sm">
+                    <h3 class="fw-bold text-primary">Operating Hours</h3>
+                    <p class="text-dark fw-medium"><strong>Open Days:</strong> <?php echo $open_days ? implode(', ', $open_days) : 'Closed'; ?></p>
+                    <p class="text-dark fw-medium"><strong>Hours:</strong> <?php echo date('h:i A', strtotime($open_time)) . ' - ' . date('h:i A', strtotime($close_time)); ?></p>
+                    <p class="text-dark fw-medium"><strong>Online Consultation:</strong> <?php echo $allow_online_consultation ? 'Available' : 'Not Available'; ?></p>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Testimonial End -->
-        
+    <!-- Clinic Details End -->
+
+
 
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-light footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
@@ -216,5 +224,4 @@
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
 </body>
-
 </html>

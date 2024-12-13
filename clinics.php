@@ -10,15 +10,22 @@ $sql = "SELECT * FROM clinics WHERE user_id = :user_id LIMIT 1";
 $stmt = $db->query($sql, ['user_id' => $user_id]);
 
 // Fetch the clinic data if it exists
-$clinic = $stmt->fetch(PDO::FETCH_ASSOC);
+$clinics = $db->query($sql, ['user_id' => $user_id])->fetchAll(PDO::FETCH_ASSOC);
 ?>
-<!-- Page Header Start -->
-<div class="container-fluid page-header py-5 mb-5 wow fadeIn" data-wow-delay="0.1s">
-    <div class="container py-5">
-        <h1 class="display-3 text-white mb-3 animated slideInDown">Clinics</h1>
+    <!-- Topbar Start -->
+    <div class="container-fluid bg-light p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div class="row gx-0 d-none d-lg-flex">
+            <div class="col-lg-7 px-5 text-start">
+            </div>
+            <div class="col-lg-5 px-5 text-end">
+                <div class="h-100 d-inline-flex align-items-center py-3 me-4">
+                    <small class="fa fa-phone-alt text-primary me-2"></small>
+                    <small>+63 9171384217</small>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-<!-- Page Header End -->
+    <!-- Topbar End -->
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">Your Clinics</h2>
@@ -40,48 +47,41 @@ $clinic = $stmt->fetch(PDO::FETCH_ASSOC);
         <?php unset($_SESSION['success']); ?>
     <?php endif; ?>
 
-    <div class="row justify-content-center">
-        <?php if (!$clinic): ?>
-            <!-- If the user has no clinics, show a clickable card to create or join a clinic -->
-            <div class="col-md-6">
-                <div class="card text-center border-light shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">No Clinic Created</h5>
-                        <p class="card-text">You have not created any clinics yet.</p>
-                        <a href="create_clinic.php" class="btn btn-primary rounded-pill mb-2">Create a Clinic</a>
-                        <a href="join_clinic.php" class="btn btn-secondary rounded-pill">Join a Clinic</a>
+    <div class="container-xxl py-5">
+        <div class="container">
+            <!-- Section for Clinics List
+            <div class="row g-4" id="clinicContainer">
+                <div class="col-lg-6 col-md-8 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="team-item position-relative rounded overflow-hidden">
+                        <div class="overflow-hidden">
+                            <img class="img-fluid" style="height: 500px; object-fit: cover; width: 100%;" src="<?php echo htmlspecialchars('img/carousel-1.jpg'); ?>" alt="<?php echo htmlspecialchars($clinic['clinic_name']); ?>">
+                        </div>
+                        <div class="team-text bg-light text-center p-4">
+                            <h5 class="fw-bold">Create or Join a Clinic</h5>
+                            <a href="create_clinic.php" class="btn btn-primary rounded-pill mb-2">Create a Clinic</a>
+                            <a href="join_clinic.php" class="btn btn-secondary rounded-pill mb-2">Join a Clinic</a>
+                        </div>
                     </div>
-                </div>
-            </div>
-        <?php else: ?>
-            <!-- If the user has a clinic, display it -->
-            <div class="col-md-6">
-                <div class="card clinic-card border-light shadow-sm">
-                    <!-- Display the cover photo -->
-                    <img src="<?php echo htmlspecialchars($clinic['clinic_cover_photo']); ?>" 
-                         class="card-img-top cover-photo rounded-top" alt="Cover Photo">
-
-                    <!-- Display the profile photo -->
-                    <div class="text-center mt-n5">
-                        <img src="<?php echo htmlspecialchars($clinic['clinic_profile_photo']); ?>" 
-                             class="profile-photo rounded-circle border" alt="Profile Photo">
-                    </div>
-
-                    <div class="card-body text-center">
-                        <h5 class="card-title"><?php echo htmlspecialchars($clinic['clinic_name']); ?></h5>
-                        <p class="text-muted"><?php echo htmlspecialchars($clinic['clinic_code']); ?></p>
-                        <p class="card-text"><?php echo htmlspecialchars($clinic['specialization']); ?></p>
-                        <a href="clinic_details.php?clinic_id=<?php echo $clinic['clinic_id']; ?>" 
-                           class="btn btn-info rounded-pill">View Clinic</a>
-                    </div>
-                    <div class="text-end pe-3 pb-3">
-                        <a href="clinic_settings.php?clinic_id=<?php echo $clinic['clinic_id']; ?>" 
-                           class="btn btn-outline-secondary rounded-circle">
-                            <i class="fas fa-cogs"></i>
+                </div> -->
+                <?php foreach ($clinics as $clinic): ?>
+                    <div class="col-lg-4 col-md-6 wow fadeInUp clinic-item" data-wow-delay="0.3s">
+                        <a href="clinic_details.php?clinic_id=<?php echo $clinic['clinic_id']; ?>" class="text-decoration-none">
+                            <div class="team-item position-relative rounded overflow-hidden" style="cursor: pointer;">
+                                <div class="overflow-hidden">
+                                    <img class="img-fluid" style="height: 500px; object-fit: cover; width: 100%;" 
+                                         src="<?php echo htmlspecialchars($clinic['clinic_cover_photo'] ?: 'default-cover.jpg'); ?>" 
+                                         alt="<?php echo htmlspecialchars($clinic['clinic_name']); ?>">
+                                </div>
+                                <div class="team-text bg-light text-center p-4">
+                                    <h5 class="fw-bold"><?php echo htmlspecialchars($clinic['clinic_name']); ?></h5>
+                                    <p class="text-primary">Specialization: <?php echo htmlspecialchars($clinic['specialization']); ?></p>
+                                    <p><?php echo htmlspecialchars(substr($clinic['description'], 0, 100)); ?>...</p>
+                                </div>
+                            </div>
                         </a>
                     </div>
-                </div>
+                <?php endforeach; ?>
             </div>
-        <?php endif; ?>
+        </div>
     </div>
 </div>
