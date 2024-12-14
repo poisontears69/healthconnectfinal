@@ -50,14 +50,16 @@ if (!isset($_SESSION['user_id'])) {
             </div>
         </div>
         <!-- Spinner End -->
-    <div class="d-flex">
+         
+        <div class="d-flex">
         <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
-            <a href="?page=clinics"><i class="fas fa-clinic-medical me-2"></i>Clinics</a>
-            <a href="?page=patients"><i class="fas fa-user-friends me-2"></i>Patients</a>
-            <a href="?page=settings"><i class="fas fa-cog me-2"></i>Settings</a>
+            <a href="index_user.php?page=clinics"><i class="fas fa-clinic-medical me-2"></i>Clinics</a>
+            <a href="index_user.php?page=patients"><i class="fas fa-user-friends me-2"></i>Patients</a>
+            <a href="index_user.php?page=settings"><i class="fas fa-cog me-2"></i>Settings</a>
             <a href="logout.php"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
         </div>
+        
         <!-- Main Content Area -->
         <div class="content flex-grow-1">
             <button class="toggle-btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
@@ -93,6 +95,7 @@ if (!isset($_SESSION['user_id'])) {
             sidebar.classList.toggle('active');
         });
     </script>
+
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i class="bi bi-arrow-up"></i></a>
 

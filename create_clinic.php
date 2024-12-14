@@ -70,9 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Insert clinic details into the database
-        $sql = "INSERT INTO clinics (clinic_code, user_id, clinic_name, specialization, description, address, clinic_cover_photo)
-                VALUES (:clinic_code, :user_id, :clinic_name, :specialization, :description, :address, :clinic_cover_photo)";
-        $params = [
+            $sql = "INSERT INTO clinics (clinic_code, user_id, clinic_name, specialization, description, address, clinic_cover_photo)
+            VALUES (:clinic_code, :user_id, :clinic_name, :specialization, :description, :address, :clinic_cover_photo)";
+            $params = [
             'clinic_code' => $clinic_code,
             'user_id' => $user_id,
             'clinic_name' => $clinic_name,
@@ -80,20 +80,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'description' => $description,
             'address' => $address,
             'clinic_cover_photo' => $cover_photo
-        ];
+            ];
 
-        if ($db->query($sql, $params)) {
+            // Use the insert() method to execute the query and get the last inserted clinic_id
+            $clinic_id = $db->insert($sql, $params);
+
+            if ($clinic_id) {
+            // Insert admin as a clinic member
+            $member_sql = "INSERT INTO clinic_members (clinic_id, user_id, role, status, created_at) 
+                    VALUES (:clinic_id, :user_id, 'admin', 'approved', NOW())";
+            $db->insert($member_sql, [
+            'clinic_id' => $clinic_id,
+            'user_id' => $user_id
+            ]);
+
             $_SESSION['success'] = 'Clinic created successfully!';
             header('Location: index_user.php?page=clinics');
             exit();
-        } else {
+            } else {
             $_SESSION['error'] = 'Failed to create the clinic. Please try again.';
+            }
         }
-    } else {
-        $_SESSION['error'] = 'All fields are required.';
     }
-}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

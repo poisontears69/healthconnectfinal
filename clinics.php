@@ -6,7 +6,7 @@ $db = new Database();
 $user_id = $_SESSION['user_id'];
 
 // Query the database to check if the user has any clinics
-$sql = "SELECT * FROM clinics WHERE user_id = :user_id LIMIT 1";
+$sql = "SELECT * FROM clinics WHERE user_id = :user_id";
 $stmt = $db->query($sql, ['user_id' => $user_id]);
 
 // Fetch the clinic data if it exists
@@ -49,12 +49,11 @@ $clinics = $db->query($sql, ['user_id' => $user_id])->fetchAll(PDO::FETCH_ASSOC)
 
     <div class="container-xxl py-5">
         <div class="container">
-            <!-- Section for Clinics List
-            <div class="row g-4" id="clinicContainer">
-                <div class="col-lg-6 col-md-8 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="row g-4" id="clinicContainer">
+                <div class="col-lg-4 col-md-6 wow fadeInUp clinic-item" data-wow-delay="0.1s">
                     <div class="team-item position-relative rounded overflow-hidden">
                         <div class="overflow-hidden">
-                            <img class="img-fluid" style="height: 500px; object-fit: cover; width: 100%;" src="<?php echo htmlspecialchars('img/carousel-1.jpg'); ?>" alt="<?php echo htmlspecialchars($clinic['clinic_name']); ?>">
+                            <img class="img-fluid" style="height: 300px; object-fit: cover; width: 100%;" src="<?php echo htmlspecialchars('img/carousel-1.jpg'); ?>" alt="<?php echo htmlspecialchars($clinic['clinic_name']); ?>">
                         </div>
                         <div class="team-text bg-light text-center p-4">
                             <h5 class="fw-bold">Create or Join a Clinic</h5>
@@ -62,25 +61,29 @@ $clinics = $db->query($sql, ['user_id' => $user_id])->fetchAll(PDO::FETCH_ASSOC)
                             <a href="join_clinic.php" class="btn btn-secondary rounded-pill mb-2">Join a Clinic</a>
                         </div>
                     </div>
-                </div> -->
-                <?php foreach ($clinics as $clinic): ?>
-                    <div class="col-lg-4 col-md-6 wow fadeInUp clinic-item" data-wow-delay="0.3s">
-                        <a href="clinic_details.php?clinic_id=<?php echo $clinic['clinic_id']; ?>" class="text-decoration-none">
-                            <div class="team-item position-relative rounded overflow-hidden" style="cursor: pointer;">
-                                <div class="overflow-hidden">
-                                    <img class="img-fluid" style="height: 500px; object-fit: cover; width: 100%;" 
-                                         src="<?php echo htmlspecialchars($clinic['clinic_cover_photo'] ?: 'default-cover.jpg'); ?>" 
-                                         alt="<?php echo htmlspecialchars($clinic['clinic_name']); ?>">
+                </div>
+                <?php if (!empty($clinics)): ?>
+                    <?php foreach ($clinics as $clinic): ?>
+                        <div class="col-lg-4 col-md-6 wow fadeInUp clinic-item" data-wow-delay="0.1s">
+                            <a href="clinic_details.php?clinic_id=<?php echo $clinic['clinic_id']; ?>" class="text-decoration-none">
+                                <div class="team-item position-relative rounded overflow-hidden" style="cursor: pointer;">
+                                    <div class="overflow-hidden">
+                                        <img class="img-fluid" style="height: 300px; object-fit: cover; width: 100%;" 
+                                             src="<?php echo htmlspecialchars($clinic['clinic_cover_photo'] ?: 'default-cover.jpg'); ?>" 
+                                             alt="<?php echo htmlspecialchars($clinic['clinic_name']); ?>">
+                                    </div>
+                                    <div class="team-text bg-light text-center p-4">
+                                        <h5 class="fw-bold"><?php echo htmlspecialchars($clinic['clinic_name']); ?></h5>
+                                        <p class="text-primary">Specialization: <?php echo htmlspecialchars($clinic['specialization']); ?></p>
+                                        <p>Clinic Code: <?php echo htmlspecialchars(substr($clinic['clinic_code'], 0, 100)); ?>
+                                    </div>
                                 </div>
-                                <div class="team-text bg-light text-center p-4">
-                                    <h5 class="fw-bold"><?php echo htmlspecialchars($clinic['clinic_name']); ?></h5>
-                                    <p class="text-primary">Specialization: <?php echo htmlspecialchars($clinic['specialization']); ?></p>
-                                    <p><?php echo htmlspecialchars(substr($clinic['description'], 0, 100)); ?>...</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                <?php endforeach; ?>
+                            </a>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-center">No clinics available. Create or join a clinic.</p>
+                <?php endif; ?>
             </div>
         </div>
     </div>
