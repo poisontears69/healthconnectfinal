@@ -1,9 +1,9 @@
 <?php
 class Database {
     private $host = 'localhost';
-    private $dbname = 'u586436726_healthconnect';
-    private $username = 'u586436726_admin';
-    private $password = '9m@@hcUWM';
+    private $dbname = 'healthconnectfinal';
+    private $username = 'root';
+    private $password = '';
     private $conn;
 
     public function getConnection() {
